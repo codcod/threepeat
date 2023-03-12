@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+podman run \
+	-dt \
+	--pod postgre15 \
+	--log-level=debug \
+	--name=my-postgres \
+	-e POSTGRES_PASSWORD=postgres -e TZ="Europe/Warsaw" -e PGTZ="Europe/Warsaw" \
+	postgres:latest

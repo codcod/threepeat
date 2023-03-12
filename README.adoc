@@ -1,0 +1,92 @@
+= Podman, PostgreSQL and Python
+
+
+== Podman
+
+Create a pod:
+
+[source, bash]
+----
+$ podman pod create --name postgre15 -p 5432:5432 
+----
+
+Run a new container from the PostgreSQL image:
+
+[source, bash]
+----
+$ podman run \
+	-dt \
+	--pod postgre15 \
+	--log-level=debug \
+	--name=my-postgres \
+	-e POSTGRES_PASSWORD=postgres -e TZ="Europe/Warsaw" -e PGTZ="Europe/Warsaw" \
+	postgres:latest
+----
+
+When done playing with PostgreSQL stop and subsequently remove the pod:
+
+[source, bash]
+----
+$ podman pod stop postgre15
+$ podman pod rm postgre15 
+----
+
+
+=== Useful Podman commands
+
+[source, bash]
+----
+$ podman pod ps  # list pods
+$ podman ps -a  # list containtes
+$ podman volume ls  # list volumes
+$ podman images  # list images
+$ podman logs my-postgres
+----
+
+
+== PostgreSQL
+
+Connect to the database (`host=0.0.0.0:5432`, `user=postgres`, `pass=postres`).
+
+Create a table:
+
+[source, sql]
+----
+CREATE TABLE IF NOT EXISTS users (
+	user_id SERIAL PRIMARY KEY,
+	name VARCHAR(50) NOT NULL,
+	password VARCHAR(50) NOT NULL,
+	created TIMESTAMPTZ NOT NULL DEFAULT clock_timestamp()
+);
+----
+
+
+== Python
+
+Create a virtual env and install libraries:
+
+[source, bash]
+----
+$ python -m venv .venv
+$ source .venv/bin/activate
+$ python -m pip install --upgrade setuptools pip
+$ pip install -r requirements.txt
+----
+
+Seed and retrieve data from the database:
+
+[source, bash]
+----
+$ ./scripts/seed
+$ ./scripts/fetch
+----
+
+
+== References
+
+Tools used:
+
+* https://formulae.brew.sh/formula/podman[Brew install Podman]
+* https://formulae.brew.sh/cask/postico#default[Brew install cask Postico]
+* https://hub.docker.com/_/postgres[PostgreSQL docker image] 
+* https://github.com/MagicStack/asyncpg[Asyncpg], https://magicstack.github.io/asyncpg/current/usage.html[manual]

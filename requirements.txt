@@ -1,0 +1,4 @@
+asyncpg
+faker
+blue
+isort
