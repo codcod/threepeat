@@ -8,7 +8,6 @@ venv/
 *.db
 .instance/
 
-log.*
 *.log
 
 # You can get more comprehensive list with:
