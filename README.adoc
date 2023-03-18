@@ -3,10 +3,11 @@
 
 == Podman
 
-Create a pod:
+Start Podman and create a pod:
 
 [source, bash]
 ----
+$ podman machine start
 $ podman pod create --name postgre15 -p 5432:5432 
 ----
 
